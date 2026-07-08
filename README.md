@@ -1,22 +1,35 @@
-# ProyectoCLOUD
+# Tomato Leaf Disease Detector
 
-ProyectoCLOUD es una aplicacion Android desarrollada en Kotlin para analizar imagenes de hojas de tomate y detectar posibles enfermedades mediante una API externa de prediccion.
+Aplicacion Android para detectar enfermedades en hojas de tomate a partir de una imagen. El proyecto combina una interfaz movil en Kotlin con una API de prediccion desplegada en Hugging Face, permitiendo que el usuario seleccione una foto, la envie al modelo y reciba un diagnostico entendible en espanol.
 
-La app permite seleccionar una imagen desde el dispositivo, enviarla al servicio de analisis y mostrar el resultado en espanol junto con una descripcion de la condicion detectada.
+Este repositorio corresponde a un proyecto academico orientado al uso de computacion en la nube, consumo de servicios externos e inteligencia artificial aplicada al cuidado de cultivos.
 
-## Caracteristicas
+## Descripcion
 
-- Seleccion de imagenes desde la galeria del dispositivo.
-- Escaneo visual con animaciones durante el analisis.
-- Envio de imagenes a una API mediante Retrofit y peticiones multipart.
-- Traduccion de predicciones tecnicas a nombres comprensibles en espanol.
-- Descripcion informativa para cada enfermedad detectada.
-- Historial local de escaneos usando Room.
-- Interfaz Android con Material Design, AppCompat y componentes Jetpack.
+La aplicacion ayuda a identificar visualmente posibles enfermedades en hojas de tomate. Desde el celular, el usuario puede cargar una imagen de la hoja, iniciar el escaneo y obtener una respuesta con:
 
-## Enfermedades detectadas
+- Nombre de la enfermedad o estado detectado.
+- Traduccion del resultado tecnico generado por el modelo.
+- Descripcion breve de la condicion encontrada.
+- Interfaz animada que simula el proceso de escaneo.
+- Historial local de escaneos realizados.
 
-La aplicacion reconoce condiciones comunes en hojas de tomate, entre ellas:
+El analisis no se ejecuta dentro del telefono. La imagen se envia a una API externa, que procesa la prediccion y devuelve el resultado a la aplicacion.
+
+## Funcionalidades principales
+
+- Seleccion de imagenes desde la galeria.
+- Envio de imagenes mediante una peticion multipart.
+- Consumo de API REST con Retrofit.
+- Interpretacion de resultados del modelo en espanol.
+- Descripciones educativas sobre enfermedades del tomate.
+- Registro local de historial con Room.
+- Pantalla de historial con RecyclerView.
+- Animaciones de escaneo y retroalimentacion visual para el usuario.
+
+## Enfermedades y estados reconocidos
+
+La aplicacion contempla las siguientes clases de prediccion:
 
 - Mancha bacteriana del tomate.
 - Tizon temprano.
@@ -34,38 +47,93 @@ La aplicacion reconoce condiciones comunes en hojas de tomate, entre ellas:
 - Kotlin
 - Android SDK
 - Gradle Kotlin DSL
+- Android Studio
 - Retrofit
-- Gson Converter
 - OkHttp
+- Gson Converter
 - Room Database
 - Coroutines
+- RecyclerView
 - Material Design
-- Jetpack Compose
 - AppCompat
+- Jetpack Compose
+
+## Arquitectura general
+
+```text
+Usuario
+  |
+  | selecciona imagen
+  v
+Aplicacion Android
+  |
+  | envia archivo por multipart/form-data
+  v
+API de prediccion en Hugging Face
+  |
+  | devuelve clase detectada
+  v
+App muestra diagnostico, descripcion e historial
+```
+
+## API de prediccion
+
+La app consume el siguiente servicio:
+
+```text
+https://cocoliso22-tomato-leaf-disease-detector.hf.space/predict
+```
+
+El endpoint recibe una imagen en el campo multipart:
+
+```text
+file
+```
+
+La respuesta esperada contiene una prediccion, que luego se traduce dentro de la app a un nombre legible en espanol.
 
 ## Requisitos
 
-- Android Studio
-- JDK 11 o superior
-- Android SDK con `compileSdk 35`
-- Conexion a internet para consumir la API de prediccion
-- Dispositivo o emulador con Android 8.0 o superior (`minSdk 26`)
+- Android Studio.
+- JDK 11 o superior.
+- Android SDK 35.
+- Dispositivo fisico o emulador con Android 8.0 o superior.
+- Conexion a internet para consumir la API.
 
-## Instalacion y ejecucion
+Configuracion principal del proyecto:
 
-1. Clona el repositorio:
+```text
+compileSdk: 35
+minSdk: 26
+targetSdk: 35
+applicationId: com.example.proyecto
+```
+
+## Instalacion
+
+Clona el repositorio:
 
 ```bash
 git clone https://github.com/JorgeZegarra22/ProyectoCLOUD.git
 ```
 
-2. Abre el proyecto en Android Studio.
+Entra al proyecto:
 
-3. Espera a que Gradle sincronice las dependencias.
+```bash
+cd ProyectoCLOUD
+```
 
-4. Ejecuta la aplicacion en un emulador o dispositivo fisico.
+Abre la carpeta en Android Studio y espera la sincronizacion de Gradle.
 
-Tambien puedes compilar desde consola:
+## Ejecucion
+
+Desde Android Studio:
+
+1. Selecciona un emulador o dispositivo fisico.
+2. Sincroniza el proyecto con Gradle.
+3. Ejecuta la app con el boton Run.
+
+Desde terminal:
 
 ```bash
 ./gradlew assembleDebug
@@ -77,23 +145,14 @@ En Windows:
 gradlew.bat assembleDebug
 ```
 
-## Uso
+## Uso de la aplicacion
 
-1. Abre la aplicacion.
+1. Abre la app.
 2. Selecciona una imagen de una hoja de tomate.
-3. Presiona el boton de escaneo.
-4. Espera el resultado de la prediccion.
-5. Revisa el diagnostico y la descripcion mostrada por la app.
-
-## API
-
-La aplicacion envia las imagenes al endpoint:
-
-```text
-https://cocoliso22-tomato-leaf-disease-detector.hf.space/predict
-```
-
-El envio se realiza como formulario multipart con el campo `file`.
+3. Inicia el escaneo.
+4. Espera la respuesta del modelo.
+5. Revisa el diagnostico y la descripcion mostrada.
+6. Consulta el historial para ver escaneos anteriores.
 
 ## Estructura principal
 
@@ -106,9 +165,15 @@ app/src/main/java/com/example/proyecto/
 |-- ScanDatabase.kt
 |-- ScanHistory.kt
 |-- ScanHistoryDao.kt
-`-- ScanHistoryAdapter.kt
+|-- ScanHistoryAdapter.kt
+|-- FileUtil.kt
+`-- PredictResponse.kt
 ```
+
+## Objetivo del proyecto
+
+El objetivo es demostrar una solucion movil conectada a la nube que use inteligencia artificial para apoyar la deteccion temprana de enfermedades en cultivos de tomate. La app funciona como cliente Android, mientras que el procesamiento de imagenes se delega a un servicio externo desplegado en la nube.
 
 ## Autor
 
-Proyecto desarrollado por Jorge Zegarra.
+Desarrollado por Jorge Zegarra.
