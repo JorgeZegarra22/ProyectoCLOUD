@@ -1,4 +1,4 @@
-# Tomato Leaf Disease Detector
+# Detector de enfermedades de las hojas de tomate
 
 Aplicacion Android para detectar enfermedades en hojas de tomate a partir de una imagen. El proyecto combina una interfaz movil en Kotlin con una API de prediccion desplegada en Hugging Face, permitiendo que el usuario seleccione una foto, la envie al modelo y reciba un diagnostico entendible en espanol.
 
